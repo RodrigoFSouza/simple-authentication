@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.cronos</groupId>
 	<artifactId>simple-security</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<name>simple-security</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
