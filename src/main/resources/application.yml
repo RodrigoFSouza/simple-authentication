@@ -7,17 +7,49 @@ spring:
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=simple-security;encrypt=false;trustServerCertificate=true
     username: sa
-    password: 1q2w3e4r@#$
+    #password: 1q2w3e4r@#$
+    password: Y.sa123456
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
     hikari:
       maximum-pool-size: 10
       minimum-idle: 5
       idle-timeout: 30000
       max-lifetime: 1800000
+
+  # Liquibase configuration
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    contexts: prod
+    default-schema: dbo
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: validate
     properties:
       hibernate:
+        globally_quoted_identifiers: true
         dialect: org.hibernate.dialect.SQLServerDialect
+    show-sql: true
+
+  # Mail configuration
+  # Para testes usar MailHog
+  # docker run -d -p 1025:1025 -p 8025:8025 mailhog/mailhog
+  mail:
+    host: localhost
+    port: 1025
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: fals
+
+#Application
+app:
+  password-reset:
+    url: http://localhost:8080/password-reset
+    token-expiration: 3600000
+    token-validity: 24
+    

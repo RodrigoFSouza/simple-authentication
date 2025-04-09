@@ -23,8 +23,7 @@ public class SecurityConfiguration {
         http
             .authorizeHttpRequests((req) -> {
                 req.requestMatchers(WHITE_LIST_URL).permitAll()
-                    //.requestMatchers("/api/v1/management/**")
-                    //.hasAnyRole("ROLE_ADMIN")
+                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/actuator/health", "/actuator/info").permitAll()
                     .anyRequest()
                     .authenticated();
             })

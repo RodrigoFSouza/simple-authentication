@@ -5,6 +5,8 @@ import br.com.cronos.simple_security.domain.dto.request.RegisterRequest;
 import br.com.cronos.simple_security.domain.dto.response.AuthenticationResponse;
 import br.com.cronos.simple_security.domain.dto.response.UserCreatedResponse;
 import br.com.cronos.simple_security.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication", description = "APIs for register and authenticate users")
+@SecurityRequirement(name = "bearerAuth")
 public class AuthenticationController {
 
     private final UserService userService;
