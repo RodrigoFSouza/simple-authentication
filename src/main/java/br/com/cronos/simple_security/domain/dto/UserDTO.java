@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 @Builder
 @Schema(description = "User information")
@@ -19,6 +21,9 @@ public class UserDTO {
 
     @Schema(description = "User's email address", example = "john.doe@example.com")
     private String email;
+
+    @Schema(description = "User's roles", example = "[\"ROLE_USER\", \"ROLE_ADMIN\"]")
+    private Set<String> roles;
 
     @Schema(description = "Whether the account is not expired", example = "true")
     private boolean isAccountNonExpired;

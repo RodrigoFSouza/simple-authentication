@@ -7,10 +7,12 @@ import br.com.cronos.simple_security.domain.dto.request.AuthenticationRequest;
 import br.com.cronos.simple_security.domain.dto.request.RegisterRequest;
 import br.com.cronos.simple_security.domain.dto.response.AuthenticationResponse;
 import br.com.cronos.simple_security.domain.dto.response.UserCreatedResponse;
+import br.com.cronos.simple_security.domain.entity.Role;
 import br.com.cronos.simple_security.domain.entity.User;
 import br.com.cronos.simple_security.exception.EmailAlreadyExistsException;
 import br.com.cronos.simple_security.exception.ResourceNotFoundException;
 import br.com.cronos.simple_security.mapper.UserMapper;
+import br.com.cronos.simple_security.repository.RoleRepository;
 import br.com.cronos.simple_security.repository.UserRepository;
 import br.com.cronos.simple_security.service.UserService;
 import jakarta.transaction.Transactional;
@@ -27,13 +29,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
@@ -45,11 +51,16 @@ public class UserServiceImpl implements UserService {
             throw new EmailAlreadyExistsException("Email already registered: " + request.email());
         }
         String encodedPassword = passwordEncoder.encode(request.password());
+
+        // Get roles, default to ROLE_USER if not provided
+        Set<Role> roles = getRolesFromNames(request.roles());
+
         var user = User.builder()
                 .firstname(request.firstname())
                 .lastname(request.lastname())
                 .email(request.email())
                 .password(encodedPassword)
+                .roles(roles)
                 .isEnabled(true)
                 .isAccountNonLocked(true)
                 .isCredentialsNonExpired(true)
@@ -96,11 +107,15 @@ public class UserServiceImpl implements UserService {
             throw new EmailAlreadyExistsException("Email already registered: " + userCreateRequestDTO.getEmail());
         }
 
+        // Get roles, default to ROLE_USER if not provided
+        Set<Role> roles = getRolesFromNames(userCreateRequestDTO.getRoles());
+
         User user = new User();
         user.setFirstname(userCreateRequestDTO.getFirstname());
         user.setLastname(userCreateRequestDTO.getLastname());
         user.setEmail(userCreateRequestDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userCreateRequestDTO.getPassword()));
+        user.setRoles(roles);
         user.setAccountNonExpired(true);
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
@@ -152,5 +167,23 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException("User not found with id: " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    /**
+     * Helper method to get roles from role names.
+     * If no roles are provided, defaults to ROLE_USER.
+     */
+    private Set<Role> getRolesFromNames(Set<String> roleNames) {
+        if (roleNames == null || roleNames.isEmpty()) {
+            // Default to ROLE_USER
+            Role userRole = roleRepository.findByName("ROLE_USER")
+                    .orElseThrow(() -> new ResourceNotFoundException("Default role ROLE_USER not found"));
+            return new HashSet<>(Set.of(userRole));
+        }
+
+        return roleNames.stream()
+                .map(roleName -> roleRepository.findByName(roleName)
+                        .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + roleName)))
+                .collect(Collectors.toSet());
     }
 }
