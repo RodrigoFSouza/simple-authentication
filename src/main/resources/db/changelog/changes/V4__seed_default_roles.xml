@@ -9,9 +9,11 @@
         <!-- Insert default roles -->
         <insert tableName="roles">
             <column name="name" value="ROLE_USER"/>
+            <column name="description" value="Users"/>
         </insert>
         <insert tableName="roles">
             <column name="name" value="ROLE_ADMIN"/>
+            <column name="description" value="Administrators"/>
         </insert>
     </changeSet>
 

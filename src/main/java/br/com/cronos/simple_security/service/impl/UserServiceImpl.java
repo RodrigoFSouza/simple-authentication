@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Helper method to get roles from role names.
+     * Helper method to get roles from role names using batch query.
      * If no roles are provided, defaults to ROLE_USER.
      */
     private Set<Role> getRolesFromNames(Set<String> roleNames) {
@@ -181,9 +181,19 @@ public class UserServiceImpl implements UserService {
             return new HashSet<>(Set.of(userRole));
         }
 
-        return roleNames.stream()
-                .map(roleName -> roleRepository.findByName(roleName)
-                        .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + roleName)))
-                .collect(Collectors.toSet());
+        // Use batch query to fetch all roles at once
+        Set<Role> foundRoles = roleRepository.findRolesByNameIn(roleNames);
+
+        // Validate that all requested roles were found
+        if (foundRoles.size() != roleNames.size()) {
+            Set<String> foundRoleNames = foundRoles.stream()
+                    .map(Role::getName)
+                    .collect(Collectors.toSet());
+            Set<String> missingRoles = new HashSet<>(roleNames);
+            missingRoles.removeAll(foundRoleNames);
+            throw new ResourceNotFoundException("Roles not found: " + String.join(", ", missingRoles));
+        }
+
+        return foundRoles;
     }
 }
