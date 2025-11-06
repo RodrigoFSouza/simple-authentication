@@ -7,5 +7,7 @@
 
     <include file="db/changelog/changes/V1__create_users_table.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/changes/V2__create_password_reset_token_table.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V3__create_roles_tables.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V4__seed_default_roles.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog> 

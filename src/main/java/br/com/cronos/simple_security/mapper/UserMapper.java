@@ -5,6 +5,7 @@ import br.com.cronos.simple_security.domain.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component // Or define as static methods if preferred
@@ -19,6 +20,9 @@ public class UserMapper {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .email(user.getEmail())
+                .roles(user.getRoles().stream()
+                        .map(role -> role.getName())
+                        .collect(Collectors.toSet()))
                 .isAccountNonExpired(user.isAccountNonExpired())
                 .isAccountNonLocked(user.isAccountNonLocked())
                 .isCredentialsNonExpired(user.isCredentialsNonExpired())
