@@ -7,5 +7,10 @@
 
     <include file="db/changelog/changes/V1__create_users_table.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/changes/V2__create_password_reset_token_table.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V3__create_permissions_table.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V4__create_roles_table.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V5__create_role_permissions_table.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V6__create_user_roles_table.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V7__insert_default_permissions.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog> 
