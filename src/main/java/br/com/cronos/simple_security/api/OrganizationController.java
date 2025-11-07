@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/organizations")
 @RequiredArgsConstructor
@@ -50,6 +52,13 @@ public class OrganizationController {
     public ResponseEntity<Page<OrganizationDTO>> getAllOrganizations(Pageable pageable) {
         Page<OrganizationDTO> organizations = organizationService.findAll(pageable);
         return ResponseEntity.ok(organizations);
+    }
+
+    @GetMapping("/{parentId}/sub-organizations")
+    @Operation(summary = "Get sub-organizations by parent organization ID")
+    public ResponseEntity<List<OrganizationDTO>> getSubOrganizations(@PathVariable Long parentId) {
+        List<OrganizationDTO> subOrganizations = organizationService.findSubOrganizations(parentId);
+        return ResponseEntity.ok(subOrganizations);
     }
 
     @DeleteMapping("/{id}")

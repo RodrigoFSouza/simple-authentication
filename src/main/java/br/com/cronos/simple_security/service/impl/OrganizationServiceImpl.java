@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class OrganizationServiceImpl implements OrganizationService {
@@ -38,12 +40,19 @@ public class OrganizationServiceImpl implements OrganizationService {
             throw new CnpjAlreadyExistsException("Organization with CNPJ " + request.getCnpj() + " already exists");
         }
 
+        Organization parentOrganization = null;
+        if (request.getParentOrganizationId() != null) {
+            parentOrganization = organizationRepository.findById(request.getParentOrganizationId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Parent organization not found with id: " + request.getParentOrganizationId()));
+        }
+
         Organization organization = Organization.builder()
                 .name(request.getName())
                 .cnpj(cleanCnpj)
                 .description(request.getDescription())
                 .companyName(request.getCompanyName())
                 .maxUsers(request.getMaxUsers())
+                .parentOrganization(parentOrganization)
                 .build();
 
         Organization saved = organizationRepository.save(organization);
@@ -86,6 +95,13 @@ public class OrganizationServiceImpl implements OrganizationService {
     public Page<OrganizationDTO> findAll(Pageable pageable) {
         return organizationRepository.findAll(pageable)
                 .map(organizationMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrganizationDTO> findSubOrganizations(Long parentOrganizationId) {
+        List<Organization> subOrganizations = organizationRepository.findByParentOrganizationId(parentOrganizationId);
+        return organizationMapper.toDto(subOrganizations);
     }
 
     @Override

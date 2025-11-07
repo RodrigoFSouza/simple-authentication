@@ -24,4 +24,6 @@ public class OrganizationCreateRequestDTO {
     private String companyName;
 
     private Integer maxUsers;
+
+    private Long parentOrganizationId;
 }

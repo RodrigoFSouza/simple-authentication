@@ -41,6 +41,14 @@ public class Organization {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_organization_id")
+    private Organization parentOrganization;
+
+    @OneToMany(mappedBy = "parentOrganization", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Organization> subOrganizations = new ArrayList<>();
+
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<User> users = new ArrayList<>();
@@ -48,10 +56,6 @@ public class Organization {
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Team> teams = new ArrayList<>();
-
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<BranchOffice> branchOffices = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {

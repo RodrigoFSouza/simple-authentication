@@ -21,7 +21,13 @@ public class OrganizationMapper {
                 .description(organization.getDescription())
                 .companyName(organization.getCompanyName())
                 .maxUsers(organization.getMaxUsers())
+                .parentOrganizationId(organization.getParentOrganization() != null ?
+                        organization.getParentOrganization().getId() : null)
+                .parentOrganizationName(organization.getParentOrganization() != null ?
+                        organization.getParentOrganization().getName() : null)
                 .currentUserCount(organization.getUsers() != null ? organization.getUsers().size() : 0)
+                .subOrganizationsCount(organization.getSubOrganizations() != null ?
+                        organization.getSubOrganizations().size() : 0)
                 .createdAt(organization.getCreatedAt())
                 .updatedAt(organization.getUpdatedAt())
                 .build();

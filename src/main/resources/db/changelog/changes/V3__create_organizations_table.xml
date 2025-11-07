@@ -21,6 +21,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="max_users" type="INT"/>
+            <column name="parent_organization_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
             <column name="created_at" type="DATETIME" defaultValueComputed="GETDATE()">
                 <constraints nullable="false"/>
             </column>
@@ -28,6 +31,14 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="organizations"
+                baseColumnNames="parent_organization_id"
+                constraintName="fk_organization_parent"
+                referencedTableName="organizations"
+                referencedColumnNames="id"
+                onDelete="SET NULL"/>
     </changeSet>
 
 </databaseChangeLog>

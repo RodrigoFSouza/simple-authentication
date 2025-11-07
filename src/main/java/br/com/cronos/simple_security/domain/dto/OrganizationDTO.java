@@ -19,7 +19,10 @@ public class OrganizationDTO {
     private String description;
     private String companyName;
     private Integer maxUsers;
+    private Long parentOrganizationId;
+    private String parentOrganizationName;
     private Integer currentUserCount;
+    private Integer subOrganizationsCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
