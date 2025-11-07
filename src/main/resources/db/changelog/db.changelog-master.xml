@@ -7,9 +7,12 @@
 
     <include file="db/changelog/changes/V1__create_users_table.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/changes/V2__create_password_reset_token_table.xml" relativeToChangelogFile="false"/>
-    <include file="db/changelog/changes/V3__create_organizations_table.xml" relativeToChangelogFile="false"/>
-    <include file="db/changelog/changes/V5__create_teams_table.xml" relativeToChangelogFile="false"/>
-    <include file="db/changelog/changes/V6__create_user_teams_table.xml" relativeToChangelogFile="false"/>
-    <include file="db/changelog/changes/V7__add_organization_to_users.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V3__create_roles_tables.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V4__seed_default_roles.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V5__create_organizations_table.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V6__create_teams_table.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V7__create_user_teams_table.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/changes/V8__add_organization_to_users.xml" relativeToChangelogFile="false"/>
+    
 
 </databaseChangeLog> 
